@@ -3,49 +3,142 @@ clear;
 
 %%Mesleh参数配置
 %%%%
-N_t=2;
-N_r=4;
-N0=1;
-
-%%%
+% N_t=4;
+% N_r=4;
+% N0=1;
+% 
+% %%%
 % H=rayleigh_channel(N_t,N_r,N0);
 % 
 % map_length=log2(N_t);
 % code_length=1e4*(map_length+1);
-
-% H=[-0.5377-0.1229i,-0.6175-0.15162;
-%    -0.5450-0.0964i,-0.3271-0.0006i;
-%    0.4624-0.2680i , 0.2058+0.3171i;
-%    0.2854-0.1493i ,-0.5190-0.2767i];
+% ber_analysis_list=zeros(1,size( E_b_N0_list,1 ) );
 % num_differences_sum=0;
-% for code_recycle=1:code_length/(map_length+1)
-%     code=bpsk_code(map_length+1); 
-%     H=rayleigh_channel(N_t,N_r,N0);
-%     H_normalize=get_H_normalize(H,0.5);
-%     H=H_normalize;
+% for ber_analysis_list=1
+%     for code_recycle=1:code_length/(map_length+1)
+%         code=bpsk_code(map_length+1); 
+%         H=rayleigh_channel(N_t,N_r,N0);
+%         H_normalize=get_H_normalize(H,0.5);
+%         H=H_normalize;
 % 
-%     
-%     x=modulation(N_t,code);
-%     noise=get_complex_noise(N_r,0);
-%     receive_data=H*(x')+noise;  %这里x普通转置
-%     x_demodulation_mesleh=demodulation_mesleh(N_t,receive_data,H);
-%     
-%     difference_matrix = x_demodulation_mesleh ~= code;
-%     num_differences = sum(difference_matrix(:));
 % 
-%     x_demodulation_mesleh=demodulation_mesleh(N_t,receive_data,H);
-%     num_differences_sum=num_differences+num_differences_sum;
+%         x=modulation(N_t,code);
+%         noise=get_complex_noise(N_r,0);
+%         receive_data=H*(x')+noise;  %这里x普通转置
+%         x_demodulation_mesleh=demodulation_mesleh(N_t,receive_data,H);
+% 
+%         difference_matrix = x_demodulation_mesleh ~= code;
+%         num_differences = sum(difference_matrix(:));
+% 
+%         x_demodulation_mesleh=demodulation_mesleh(N_t,receive_data,H);
+%         num_differences_sum=num_differences+num_differences_sum;
+% 
+% 
+%     end
+% end
+% E_b_N0_list=[0:15];
+% 
+% E_b_N0_list = 10.^(E_b_N0_list / 10);
+% ber_analysis_list=zeros(1,size( E_b_N0_list,1 ) );
+% N_t=4;
+% for i=1:size(E_b_N0_list,2)
+%     ber=get_ber_analysis(N_t,E_b_N0_list(1,i));
+%     ber_analysis_list(1,i)=ber;
 %     
 %     
 % end
-E_b_N0_list=[0:25];
-ber_analysis=zeros(1,size(E_b_N0_list.1));
+% plot_log10_y(ber_analysis_list)
+
+
+
+% x=demodulation_optimal(N_t,E_b_N0,H,receive);
+
+
 N_t=4;
-for i=1:size(E_b_N0_list,2)
-    ber_analysis=get_ber_analysis(E_b_N0_list(1,i),4)
+N_r=4;
+N0=1;
+
+map_length=log2(N_t);
+
+SNR_list=[1:25];
+code_length=1e4*(map_length+1);
+ber_opt_list=zeros(1,size(SNR_list,2));
+ber_analy_
+for SNR=1:size(SNR_list,2)
+    num_differences_sum=0;
+   for  i=1:code_length/((map_length+1))
+       
+    code=bpsk_code(map_length+1); 
+    x=modulation(N_t,code);
+    
+    H=rayleigh_channel(N_t,N_r,N0);
+    noise=get_complex_noise(N_r,0);
+    receive_data=H*(x')+noise;  %这里x普通转置
+    x_demodulation=demodulation_optimal(N_t,H,receive_data);
+    difference_matrix = x_demodulation ~= code;
+    num_differences = sum(difference_matrix(:));
+    num_differences_sum=num_differences+num_differences_sum;
+   end
+   ber_lis
+    
+    
+    
+    
+    
+    
 end
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% function plot_log10_y(data)
+%     % 检查输入是否为行向量
+%     if size(data, 1) ~= 1
+%         error('输入必须是行矩阵（即 1×n 的向量）');
+%     end
+% 
+%     % 确保数据为正数（10 的指数次方仅适用于正值）
+%     if any(data <= 0)
+%         error('输入数据必须为正数，因为 10 的指数次方无法表示零或负值');
+%     end
+% 
+%     % 生成横坐标
+%     x = 1:length(data);
+% 
+%     % 绘制图像
+%     figure;
+%     semilogy(x, data, '-o', 'LineWidth', 1.5); % semilogy 用于以 10 为底的对数刻度
+%     grid on;
+% 
+%     % 设置轴标签和标题
+%     xlabel('Index');
+%     ylabel('Value (Logarithmic Scale)');
+%     title('Plot with Logarithmic Y-Axis (Base 10)');
+% 
+%     % 设置字体大小
+%     set(gca, 'FontSize', 12);
+% end
 
 
 

@@ -14,4 +14,5 @@ function bin_matrix = dec2bin_matrix(decimal_value, num_bits)
     
     % 将二进制字符串转换为二进制矩阵（行向量）
     bin_matrix = arrayfun(@(x) str2double(x), binary_str);
+
 end
