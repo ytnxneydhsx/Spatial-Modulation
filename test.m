@@ -21,7 +21,8 @@ for code_recycle=1:code_length/(map_length+1)
  
     
     x=modulation(N_t,code);
-    x1=x;
+
+    
     noise=get_complex_noise(N_r,0);
     receive_data=H*(x')+noise;  %这里x普通转置
     

@@ -60,38 +60,53 @@ N0=1;
 
 map_length=log2(N_t);
 
-SNR_list=[1:25];
+SNR_list=[1:10];
 code_length=1e4*(map_length+1);
+
 ber_opt_list=zeros(1,size(SNR_list,2));
-ber_analy_=zeros(1,size(SNR_list,2));
-for SNR=1:size(SNR_list,2)
-    num_differences_sum=0;
+ber_analytical_list=zeros(1,size(SNR_list,2));
+ber_mesleh_list=zeros(1,size(SNR_list,2));
+
+for SNR_recycle=1:size(SNR_list,2)
+    
+    num_differences_sum_opt=0;
+    num_differences_sum__mesleh=0;
+    snr_linear = 10^(SNR_list(1,SNR_recycle) / 10);
+    H=rayleigh_channel(N_t,N_r,N0);
+    
    for  i=1:code_length/((map_length+1))
        
     code=bpsk_code(map_length+1); 
     x=modulation(N_t,code);
     
-    H=rayleigh_channel(N_t,N_r,N0);
-    noise=get_complex_noise(N_r,0);
-    receive_data=H*(x')+noise;  %这里x普通转置
-    x_demodulation=demodulation_optimal(N_t,H,receive_data);
-    difference_matrix = x_demodulation ~= code;
+    
+    noise=get_complex_noise(N_r,N0);
+    receive_data=sqrt(snr_linear)*H*(x')+noise;  %这里x普通转置
+    
+    %%
+    %%opt
+    x_demodulation_opt=demodulation_optimal(N_t,H,receive_data,snr_linear);
+    difference_matrix = x_demodulation_opt ~= code;
     num_differences = sum(difference_matrix(:));
-    num_differences_sum=num_differences+num_differences_sum;
+    num_differences_sum_opt=num_differences+num_differences_sum_opt;
+    %%
+    %%sub
+%     x_demodulation_mesleh=demodulation_mesleh(N_t,H,receive_data);
+%     difference_matrix = x_demodulation_mesleh ~= code;
+%     num_differences = sum(difference_matrix(:));
+%     num_differences_sum__mesleh=num_differences+num_differences_sum__mesleh;
+    %%
    end
-   ber_lis
-    
-    
-    
-    
-    
-    
+   ber_opt_list(1,SNR_recycle)=num_differences_sum_opt/code_length;
+   ber_analytical_list(1,SNR_recycle)=get_ber_analysis(N_t,SNR_list(1,SNR_recycle));
+%    ber_mesleh_list(1,SNR_recycle)=num_differences_sum__mesleh/code_length;
 end
 
 
 
 
 
+plot_log_scale(SNR_list,ber_opt_list,ber_analytical_list);
 
 
 
@@ -111,35 +126,37 @@ end
 
 
 
-
-% function plot_log10_y(data)
-%     % 检查输入是否为行向量
-%     if size(data, 1) ~= 1
-%         error('输入必须是行矩阵（即 1×n 的向量）');
-%     end
-% 
-%     % 确保数据为正数（10 的指数次方仅适用于正值）
-%     if any(data <= 0)
-%         error('输入数据必须为正数，因为 10 的指数次方无法表示零或负值');
-%     end
-% 
-%     % 生成横坐标
-%     x = 1:length(data);
-% 
-%     % 绘制图像
-%     figure;
-%     semilogy(x, data, '-o', 'LineWidth', 1.5); % semilogy 用于以 10 为底的对数刻度
-%     grid on;
-% 
-%     % 设置轴标签和标题
-%     xlabel('Index');
-%     ylabel('Value (Logarithmic Scale)');
-%     title('Plot with Logarithmic Y-Axis (Base 10)');
-% 
-%     % 设置字体大小
-%     set(gca, 'FontSize', 12);
-% end
-
+function plot_log_scale(x, y1, y2)
+    % x: 横坐标数据
+    % y1: 第一个纵坐标数据，蓝色
+    % y2: 第二个纵坐标数据，红色
+    
+    % 创建新的图形窗口
+    figure;
+    
+    % 绘制第一个数据，蓝色
+    semilogy(x, y1, 'b', 'LineWidth', 2); % semilogy 创建对数坐标图（y轴）
+    hold on; % 保持当前图形，不覆盖
+    
+    % 绘制第二个数据，红色
+    semilogy(x, y2, 'r', 'LineWidth', 2);
+    
+    % 设置坐标轴标签
+    xlabel('X轴');
+    ylabel('Y轴');
+    
+    % 设置图例
+    legend('beroptlist', 'beranalyticallist');
+    
+    % 显示网格
+    grid on;
+    
+    % 设置坐标轴的尺度为对数
+    set(gca, 'YScale', 'log');
+    
+    % 显示图形
+    hold off;
+end
 
 
 
