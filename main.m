@@ -54,7 +54,7 @@ clear;
 % x=demodulation_optimal(N_t,E_b_N0,H,receive);
 
 
-N_t=2;
+N_t=4;
 N_r=4;
 N0=1;
 
@@ -75,7 +75,7 @@ for recycle=1:size(recyale_list,2)
 
         num_differences_sum_opt=0;
         num_differences_sum__mesleh=0;
-        snr_linear = 10^(SNR_list(1,SNR_recycle) / 10);
+        snr_linear = 10.^(SNR_list(1,SNR_recycle)./ 10);
 
 
        for  i=1:code_length/((map_length+1))
@@ -168,12 +168,12 @@ function plot_with_log_y(x, y1, y2, y3, y4, y5)
     figure;
     
     % 使用10为底的幂函数绘制每一个y数据
-    semilogy(x, y1, 'DisplayName', 'ber_analytical_list');
+    semilogy(x, y1, 'DisplayName', 'ber analytical list');
     hold on;
-    semilogy(x, y2, 'DisplayName', 'ber_mesleh_list');
-    semilogy(x, y3, 'DisplayName', 'ber_mesleh_list_normalize');
-    semilogy(x, y4, 'DisplayName', 'ber_opt_list');
-    semilogy(x, y5, 'DisplayName', 'ber_opt_list_normalize');
+    semilogy(x, y2, 'DisplayName', 'ber mesleh list');
+    semilogy(x, y3, 'DisplayName', 'ber mesleh list_normalize');
+    semilogy(x, y4, 'DisplayName', 'ber opt list');
+    semilogy(x, y5, 'DisplayName', 'ber opt list normalize');
 
     
     % 设置图像标签
