@@ -140,30 +140,25 @@ for recycle=1:size(recyale_list,2)
         H=sqrt(snr_linear)*H_normalize_;
         %s生成码元
         code=bpsk_code(map_length+1); 
-        %调制
+        %
         x=modulation(N_t,code);
 
 
         noise=get_complex_noise(N_r,N0);
-        
         receive_data=sqrt(snr_linear)*H*(x')+noise;  %这里x普通转置
 
         %%
         %%opt
         x_demodulation_opt=demodulation_optimal(N_t,H,receive_data,snr_linear);
-        
         difference_matrix = x_demodulation_opt ~= code;
         num_differences = sum(difference_matrix(:));
         num_differences_sum_opt=num_differences+num_differences_sum_opt;
-        
         %%
         %%sub
         x_demodulation_mesleh=demodulation_mesleh(N_t,receive_data,H);
-        
         difference_matrix = x_demodulation_mesleh ~= code;
         num_differences = sum(difference_matrix(:));
         num_differences_sum__mesleh=num_differences+num_differences_sum__mesleh;
-        
         %%
        end
        ber_opt_list_normalize(recycle,SNR_recycle)=num_differences_sum_opt/code_length;
