@@ -42,7 +42,7 @@ clear;
 % ber_analysis_list=zeros(1,size( E_b_N0_list,1 ) );
 % N_t=4;
 % for i=1:size(E_b_N0_list,2)
-%     ber=get_ber_analysis(N_t,E_b_N0_list(1,i));
+%     ber=get_ber_analysis(N_r,N_t,E_b_N0_list(1,i));
 %     ber_analysis_list(1,i)=ber;
 %     
 %     
@@ -112,7 +112,7 @@ for recycle=1:size(recyale_list,2)
        end
        %统计误码率
        ber_opt_list(recycle,SNR_recycle)=num_differences_sum_opt/code_length;
-       ber_analytical_list(recycle,SNR_recycle)=get_ber_analysis(N_t,snr_linear);
+       ber_analytical_list(recycle,SNR_recycle)=get_ber_analysis(N_r,N_t,snr_linear);
        ber_mesleh_list(recycle,SNR_recycle)=num_differences_sum__mesleh/code_length;
        
     end
@@ -167,7 +167,7 @@ for recycle=1:size(recyale_list,2)
         %%
        end
        ber_opt_list_normalize(recycle,SNR_recycle)=num_differences_sum_opt/code_length;
-       ber_analytical_list_normalize(recycle,SNR_recycle)=get_ber_analysis(N_t,snr_linear);
+       ber_analytical_list_normalize(recycle,SNR_recycle)=get_ber_analysis(N_r,N_t,snr_linear);
        ber_mesleh_list_normalize(recycle,SNR_recycle)=num_differences_sum__mesleh/code_length;
     end
 end
